@@ -3,11 +3,15 @@ import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { MessageSquare, Users, TrendingUp, Briefcase, Target, Crown } from 'lucide-react';
+import { MessageSquare, Users, TrendingUp, Briefcase, Target, Crown, Globe, Pen, SpeakerIcon, Paperclip, ArrowBigDownIcon, ArrowBigUp, Waves, LampDesk, Lightbulb, AlertCircle, HelpCircle } from 'lucide-react';
 import ScenarioChat from '@/components/ScenarioChat';
 import WelcomeHeader from '@/components/WelcomeHeader';
+import { Tooltip } from '@/components/ui/tooltip';
+import { Alert } from '@/components/ui/alert';
+import { Head } from 'react-day-picker';
 
 const scenarios = [
+  // 🔹 Core Communication
   {
     id: 'negotiation',
     title: 'Negotiation Skills',
@@ -25,19 +29,21 @@ const scenarios = [
     isPremium: false
   },
   {
+    id: 'conflict-resolution',
+    title: 'Conflict Resolution',
+    description: 'Navigate difficult conversations',
+    icon: MessageSquare,
+    color: 'bg-red-500',
+    isPremium: true
+  },
+
+  // 🔸 Team & Management
+  {
     id: 'project-management',
     title: 'Project Management',
     description: 'Get stakeholder buy-in and manage resources',
     icon: Briefcase,
     color: 'bg-purple-500',
-    isPremium: true
-  },
-  {
-    id: 'marketing',
-    title: 'Marketing & Advertising',
-    description: 'Craft compelling campaigns and messaging',
-    icon: Target,
-    color: 'bg-orange-500',
     isPremium: true
   },
   {
@@ -49,14 +55,79 @@ const scenarios = [
     isPremium: true
   },
   {
-    id: 'conflict-resolution',
-    title: 'Conflict Resolution',
-    description: 'Navigate difficult conversations',
-    icon: MessageSquare,
-    color: 'bg-red-500',
+    id: 'performance-feedback',
+    title: 'Performance Feedback',
+    description: 'Deliver constructive feedback effectively',
+    icon: ArrowBigUp,
+    color: 'bg-yellow-500',
+    isPremium: true
+  },
+
+  // 🔹 Support & Service
+  {
+    id: 'customer-service',
+    title: 'Customer Service',
+    description: 'Handle tough customers with empathy and clarity',
+    icon: HelpCircle,
+    color: 'bg-teal-500',
+    isPremium: false
+  },
+  {
+    id: 'crisis-communication',
+    title: 'Crisis Communication',
+    description: 'Respond to emergencies with poise and clarity',
+    icon: AlertCircle,
+    color: 'bg-rose-600',
+    isPremium: true
+  },
+
+  // 🔸 Cultural & Digital Communication
+  {
+    id: 'cross-cultural',
+    title: 'Cross-Cultural Communication',
+    description: 'Communicate across language and cultural barriers',
+    icon: Globe,
+    color: 'bg-cyan-600',
+    isPremium: true
+  },
+  {
+    id: 'writing',
+    title: 'Persuasive Writing',
+    description: 'Write emails, memos, and reports that influence',
+    icon: Pen,
+    color: 'bg-slate-600',
+    isPremium: false
+  },
+
+  // 🔹 Presentation & Personal Branding
+  {
+    id: 'public-speaking',
+    title: 'Public Speaking',
+    description: 'Present ideas clearly and persuasively',
+    icon: Lightbulb,
+    color: 'bg-sky-600',
+    isPremium: true
+  },
+  {
+    id: 'interviews',
+    title: 'Interview Skills',
+    description: 'Answer tough questions and sell your strengths',
+    icon: Paperclip,
+    color: 'bg-pink-500',
+    isPremium: false
+  },
+
+  // 🔸 Marketing
+  {
+    id: 'marketing',
+    title: 'Marketing & Advertising',
+    description: 'Craft compelling campaigns and messaging',
+    icon: Target,
+    color: 'bg-orange-500',
     isPremium: true
   }
 ];
+
 
 const Index = () => {
   const [selectedScenario, setSelectedScenario] = useState<string | null>(null);
@@ -89,10 +160,10 @@ const Index = () => {
         <div className="max-w-4xl mx-auto">
           <div className="text-center mb-12">
             <h1 className="text-4xl font-bold text-gray-900 mb-4">
-              Master the Art of Persuasion
+              Communication Skills Training
             </h1>
             <p className="text-xl text-gray-600 mb-6">
-              Practice real-world communication scenarios and get AI-powered feedback to improve your skills
+              Practice real-world negotiation scenarios and get expert AI-powered feedback to improve your skills
             </p>
             <div className="flex items-center justify-center gap-2 mb-8">
               <Badge variant="secondary" className="text-sm">

@@ -17,8 +17,8 @@ const WelcomeHeader = ({ isTrialUser }: WelcomeHeaderProps) => {
               <MessageSquare className="w-6 h-6 text-white" />
             </div>
             <div>
-              <h1 className="text-xl font-bold text-gray-900">PersuadeAI</h1>
-              <p className="text-sm text-gray-500">Communication Skills Training</p>
+              <h1 className="text-xl font-bold text-gray-900">PlotOps</h1>
+              <p className="text-sm text-gray-500">Control the Narrative</p>
             </div>
           </div>
           
