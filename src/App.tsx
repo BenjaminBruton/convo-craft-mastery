@@ -10,6 +10,8 @@ import LoginPage from "./pages/LoginPage";
 import RegisterPage from "./pages/RegisterPage";
 import MagicLinkPage from "./pages/MagicLinkPage";
 
+import Footer from "./components/Footer";
+
 const queryClient = new QueryClient();
 
 const App = () => (
@@ -29,6 +31,7 @@ const App = () => (
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>
+      <Footer />
     </TooltipProvider>
   </QueryClientProvider>
 );
