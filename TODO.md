@@ -1,5 +1,6 @@
 # TODO
 
+- Get Supabase correctly configured for 'profiles' and for the table to be autopopulated when users register
 - Work on logic for premium subscription including Stripe integration
 - Only show 'Free Trial' references when someone is on premium subscriptions and actively in the free trial period defined by Stripe subscription
 - Define which scenarios are free and what are premium

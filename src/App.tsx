@@ -11,6 +11,7 @@ import RegisterPage from "./pages/RegisterPage";
 import MagicLinkPage from "./pages/MagicLinkPage";
 
 import Footer from "./components/Footer";
+import Subscribe from "./pages/Subscribe";
 
 const queryClient = new QueryClient();
 
@@ -23,6 +24,7 @@ const App = () => (
         <Routes>
           <Route path="/" element={<Index />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
+          <Route path="/subscribe" element={<Subscribe />} />
           <Route path="/login" element={<LoginPage />} />
           <Route path="/register" element={<RegisterPage />} />
           <Route path="/magic-link" element={<MagicLinkPage />} />

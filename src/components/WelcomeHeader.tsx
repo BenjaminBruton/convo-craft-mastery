@@ -5,12 +5,8 @@ import { supabase } from '@/lib/supabaseClient';
 import { useNavigate } from "react-router-dom";
 import { useAuth } from '@/context/AuthContext';
 
-interface WelcomeHeaderProps {
-  isTrialUser: boolean;
-}
-
-const WelcomeHeader = ({ isTrialUser }: WelcomeHeaderProps) => {
-  const { user } = useAuth();
+const WelcomeHeader = () => {
+  const { user, profile } = useAuth();
   const navigate = useNavigate();
 
   const handleLogout = async () => {
@@ -35,7 +31,12 @@ const WelcomeHeader = ({ isTrialUser }: WelcomeHeaderProps) => {
 
           {/* User Controls */}
           <div className="flex items-center gap-4">
-            {isTrialUser && (
+            {profile?.isPremium ? (
+              <Badge variant="outline" className="flex items-center gap-1">
+                <Crown className="w-3 h-3 text-yellow-500" />
+                Premium
+              </Badge>
+            ) : (
               <Badge variant="outline" className="flex items-center gap-1">
                 <Crown className="w-3 h-3" />
                 Trial
@@ -47,8 +48,11 @@ const WelcomeHeader = ({ isTrialUser }: WelcomeHeaderProps) => {
               {user ? user.email : "Profile"}
             </Button>
 
-            {isTrialUser && (
-              <Button size="sm" className="bg-blue-600 hover:bg-blue-700">
+            {!profile?.isPremium && (
+              <Button
+                size="sm"
+                className="bg-blue-600 hover:bg-blue-700"
+                onClick={() => navigate("/subscribe")}>
                 Upgrade
               </Button>
             )}

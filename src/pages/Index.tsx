@@ -1,5 +1,6 @@
 
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -9,17 +10,17 @@ import WelcomeHeader from '@/components/WelcomeHeader';
 import { Tooltip } from '@/components/ui/tooltip';
 import { Alert } from '@/components/ui/alert';
 import { Head } from 'react-day-picker';
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+  DialogFooter,
+} from '@/components/ui/dialog';
 
 const scenarios = [
   // 🔹 Core Communication
-  {
-    id: 'negotiation',
-    title: 'Negotiation Skills',
-    description: 'Master the art of win-win negotiations',
-    icon: MessageSquare,
-    color: 'bg-blue-500',
-    isPremium: false
-  },
   {
     id: 'sales',
     title: 'Sales Mastery',
@@ -29,11 +30,37 @@ const scenarios = [
     isPremium: false
   },
   {
+    id: 'negotiation',
+    title: 'Negotiation Skills',
+    description: 'Master the art of win-win negotiations',
+    icon: MessageSquare,
+    color: 'bg-blue-500',
+    isPremium: true
+  },
+  {
     id: 'conflict-resolution',
     title: 'Conflict Resolution',
     description: 'Navigate difficult conversations',
     icon: MessageSquare,
     color: 'bg-red-500',
+    isPremium: true
+  },
+
+  // 🔹 Support & Service
+  {
+    id: 'customer-service',
+    title: 'Customer Service',
+    description: 'Handle tough customers with empathy and clarity',
+    icon: HelpCircle,
+    color: 'bg-teal-500',
+    isPremium: false
+  },
+  {
+    id: 'crisis-communication',
+    title: 'Crisis Communication',
+    description: 'Respond to emergencies with poise and clarity',
+    icon: AlertCircle,
+    color: 'bg-rose-600',
     isPremium: true
   },
 
@@ -63,33 +90,7 @@ const scenarios = [
     isPremium: true
   },
 
-  // 🔹 Support & Service
-  {
-    id: 'customer-service',
-    title: 'Customer Service',
-    description: 'Handle tough customers with empathy and clarity',
-    icon: HelpCircle,
-    color: 'bg-teal-500',
-    isPremium: false
-  },
-  {
-    id: 'crisis-communication',
-    title: 'Crisis Communication',
-    description: 'Respond to emergencies with poise and clarity',
-    icon: AlertCircle,
-    color: 'bg-rose-600',
-    isPremium: true
-  },
-
   // 🔸 Cultural & Digital Communication
-  {
-    id: 'cross-cultural',
-    title: 'Cross-Cultural Communication',
-    description: 'Communicate across language and cultural barriers',
-    icon: Globe,
-    color: 'bg-cyan-600',
-    isPremium: true
-  },
   {
     id: 'writing',
     title: 'Persuasive Writing',
@@ -98,16 +99,17 @@ const scenarios = [
     color: 'bg-slate-600',
     isPremium: false
   },
-
-  // 🔹 Presentation & Personal Branding
   {
-    id: 'public-speaking',
-    title: 'Public Speaking',
-    description: 'Present ideas clearly and persuasively',
-    icon: Lightbulb,
-    color: 'bg-sky-600',
+    id: 'cross-cultural',
+    title: 'Cross-Cultural Communication',
+    description: 'Communicate across language and cultural barriers',
+    icon: Globe,
+    color: 'bg-cyan-600',
     isPremium: true
   },
+  
+
+  // 🔹 Presentation & Personal Branding
   {
     id: 'interviews',
     title: 'Interview Skills',
@@ -116,6 +118,15 @@ const scenarios = [
     color: 'bg-pink-500',
     isPremium: false
   },
+  {
+    id: 'public-speaking',
+    title: 'Public Speaking',
+    description: 'Present ideas clearly and persuasively',
+    icon: Lightbulb,
+    color: 'bg-sky-600',
+    isPremium: true
+  },
+  
 
   // 🔸 Marketing
   {
@@ -132,12 +143,13 @@ const scenarios = [
 const Index = () => {
   const [selectedScenario, setSelectedScenario] = useState<string | null>(null);
   const [isTrialUser, setIsTrialUser] = useState(true); // This would come from auth context
+  const [showUpgradeDialog, setShowUpgradeDialog] = useState(false);
+  const navigate = useNavigate();
 
   const handleScenarioSelect = (scenarioId: string) => {
     const scenario = scenarios.find(s => s.id === scenarioId);
     if (scenario?.isPremium && isTrialUser) {
-      // Show upgrade prompt
-      alert('This scenario requires a premium subscription. Upgrade to continue!');
+      setShowUpgradeDialog(true);
       return;
     }
     setSelectedScenario(scenarioId);
@@ -147,6 +159,11 @@ const Index = () => {
     setSelectedScenario(null);
   };
 
+  const handleUpgrade = () => {
+    setShowUpgradeDialog(false);
+    navigate("/subscribe");
+  };
+
   if (selectedScenario) {
     const scenario = scenarios.find(s => s.id === selectedScenario)!;
     return <ScenarioChat scenario={scenario} onBack={handleBackToScenarios} />;
@@ -154,8 +171,24 @@ const Index = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50">
-      <WelcomeHeader isTrialUser={isTrialUser} />
-      
+      <WelcomeHeader />
+
+      <Dialog open={showUpgradeDialog} onOpenChange={setShowUpgradeDialog}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Upgrade to Premium</DialogTitle>
+            <DialogDescription>
+              This scenario requires a premium subscription. Upgrade to unlock all scenarios and advanced features!
+            </DialogDescription>
+          </DialogHeader>
+          <DialogFooter>
+            <Button className="w-full" size="lg" onClick={handleUpgrade}>
+              Upgrade
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
       <div className="container mx-auto px-4 py-8">
         <div className="max-w-4xl mx-auto">
           <div className="text-center mb-12">
@@ -179,9 +212,9 @@ const Index = () => {
             {scenarios.map((scenario) => {
               const IconComponent = scenario.icon;
               const isLocked = scenario.isPremium && isTrialUser;
-              
+
               return (
-                <Card 
+                <Card
                   key={scenario.id}
                   className={`cursor-pointer transition-all duration-300 hover:shadow-lg hover:scale-105 ${
                     isLocked ? 'opacity-70' : ''
@@ -205,9 +238,17 @@ const Index = () => {
                     </CardDescription>
                   </CardHeader>
                   <CardContent className="text-center">
-                    <Button 
-                      className="w-full" 
+                    <Button
+                      className="w-full"
                       variant={isLocked ? "outline" : "default"}
+                      onClick={e => {
+                        e.stopPropagation();
+                        if (isLocked) {
+                          setShowUpgradeDialog(true);
+                        } else {
+                          setSelectedScenario(scenario.id);
+                        }
+                      }}
                     >
                       {isLocked ? 'Upgrade to Access' : 'Start Scenario'}
                     </Button>
@@ -225,7 +266,12 @@ const Index = () => {
                   <p className="text-lg mb-6 opacity-90">
                     Get unlimited access to all scenarios, advanced feedback, and progress tracking
                   </p>
-                  <Button size="lg" variant="secondary" className="text-gray-900">
+                  <Button
+                    size="lg"
+                    variant="secondary"
+                    className="text-gray-900"
+                    onClick={() => navigate("/subscribe")}
+                  >
                     Upgrade to Premium
                   </Button>
                 </CardContent>

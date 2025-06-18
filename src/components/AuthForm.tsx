@@ -24,7 +24,7 @@ const AuthForm = ({ mode }: AuthFormProps) => {
     setLoading(true)
 
     if (isRegister) {
-      const { error } = await supabase.auth.signUp({
+      const { data, error } = await supabase.auth.signUp({
         email,
         password,
         options: {
@@ -38,6 +38,16 @@ const AuthForm = ({ mode }: AuthFormProps) => {
       if (error) {
         toast({ title: "Registration failed", description: error.message })
       } else {
+        // Insert into profiles table if user object is available
+        if (data?.user) {
+          const { id } = data.user
+          const { error: profileError } = await supabase
+            .from("profiles")
+            .insert([{ id, isPremium: false }])
+          if (profileError) {
+            toast({ title: "Profile creation failed", description: profileError.message })
+          }
+        }
         toast({ title: "Account created", description: "Check your email to confirm your account." })
         navigate("/") // ✅ redirect after registration
       }
